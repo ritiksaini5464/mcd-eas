@@ -68,7 +68,7 @@
 /*
   NFC Init will call the ioctl to register the PID with the i2c driver
 */
-#define P544_SET_NFC_SERVICE_PID _IOW(PN544_MAGIC, 0x05, long)
+#define P544_SET_NFC_SERVICE_PID _IOW(PN544_MAGIC, 0x05, unsigned int)
 
 typedef enum p61_access_state{
     P61_STATE_INVALID = 0x0000,
@@ -87,6 +87,6 @@ struct pn544_i2c_platform_data {
     unsigned int ven_gpio;
     unsigned int firm_gpio;
     unsigned int ese_pwr_gpio; /* gpio to give power to p61, only TEE should use this */
-	unsigned int clk_gpio;
-	const char *clk_src_name;
+	unsigned int clk_gpio; /*ruanbanmao add for 15801 nfc 2015/10/16*/
+	const char *clk_src_name; /*ruanbanmao add for nfc*/
 };

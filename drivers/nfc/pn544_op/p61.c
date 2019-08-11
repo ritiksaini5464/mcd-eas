@@ -40,8 +40,8 @@
 #include <linux/sched.h>
 #include <linux/poll.h>
 #include <linux/regulator/consumer.h>
-#include "p61.h"
-#include "pn544.h"
+#include <p61.h>
+#include <pn544.h>
 extern long  pn544_dev_ioctl(struct file *filp, unsigned int cmd,
         unsigned long arg);
 #define DRAGON_P61 1
@@ -187,6 +187,7 @@ static long p61_dev_ioctl(struct file *filp, unsigned int cmd,
                 P61_ERR_MSG(KERN_ALERT " ERROR : p61_regulator is not enabled");
             }
 #else
+			//ruanbanmao add for debug cs.
 			P61_DBG_MSG(KERN_ALERT " Soft Reset");
 			//gpio_set_value(p61_dev->rst_gpio, 1);
 			//msleep(20);
@@ -384,6 +385,11 @@ static ssize_t p61_dev_read(struct file *filp, char *buf, size_t count,
 
     P61_DBG_MSG("p61_dev_read count %d - Enter \n", (int)count);
 
+   /* if (count < MAX_BUFFER_SIZE)
+    {
+        P61_ERR_MSG(KERN_ALERT "Invalid length (min : 258) [%d] \n", (int)count);
+        return -EINVAL;
+    }*/
     mutex_lock(&p61_dev->read_mutex);
     if (count > MAX_BUFFER_SIZE)
     {
