@@ -191,7 +191,7 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
 	 * local timer will be shut down.  If a local timer is used from another
 	 * CPU as a broadcast timer, this call may fail if it is not available.
 	 */
-	if (broadcast && tick_broadcast_enter()) {
+	if (broadcast) {
 		index = find_deepest_state(drv, dev, target_state->exit_latency,
 					   CPUIDLE_FLAG_TIMER_STOP, false);
 		if (index < 0) {
@@ -217,12 +217,6 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
 	/* The cpu is no longer idle or about to enter idle. */
 	sched_idle_set_state(NULL);
 
-	if (broadcast) {
-		if (WARN_ON_ONCE(!irqs_disabled()))
-			local_irq_disable();
-
-		tick_broadcast_exit();
-	}
 
 	if (!cpuidle_state_is_coupled(dev, drv, index))
 		local_irq_enable();
